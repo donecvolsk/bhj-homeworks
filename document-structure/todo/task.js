@@ -1,21 +1,37 @@
+
 const form = document.querySelector('form');
 const taskInput = document.getElementById('task__input');
-
 const tasksList = document.querySelector('.tasks__list');
-const task = document.querySelector('.task');
-const taskTitle = document.querySelector('.task__title');
 
 
-form.addEventListener('submit', (event) => { 
-    event.preventDefault();
+let task = function() {tasksList.innerHTML +=
+`<div class="task">
+<div class="task__title">
+${taskInput.value}
+</div>
+<a href="#" class="task__remove">&times;</a>
+</div>`; }
 
-    let newDiv = document.createElement('div');
-    newDiv = task.cloneNode(true);
-    taskTitle.textContent = taskInput.value;
-    tasksList.before(newDiv);
-    event.target.reset();
-    })
-    
+
+
+form.addEventListener('submit', (event) => {
+	event.preventDefault();
+	task();
+	taskInput.value = "";
+
+	let taskRemove = Array.from(document.querySelectorAll('.task__remove'));
+	for (let i = 0; i < taskRemove.length; i++) {
+	taskRemove[i].addEventListener('click', (event) => {
+		event.preventDefault();
+		event.target.closest(".task").remove();
+	})	
+}
+})
+
+
+
+
+
 
 
 
