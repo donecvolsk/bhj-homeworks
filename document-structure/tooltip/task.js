@@ -6,12 +6,11 @@ function activeHint() {
         hasTooltip[i].addEventListener('click', (event) => {
             event.preventDefault();
             let coords = hasTooltip[i].getBoundingClientRect();
-              
             toolTip.textContent = hasTooltip[i].title;
-            toolTip.classList.add('tooltip_active');
+            toolTip.classList.toggle('tooltip_active'); //доработка, заменил add на toggle
             toolTip.style.left = coords.left + "px";
             toolTip.style.top = coords.bottom + "px";
-            
+
         })       
     }   
 }

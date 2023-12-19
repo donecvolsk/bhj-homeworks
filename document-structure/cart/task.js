@@ -1,95 +1,55 @@
-let product = document.querySelectorAll('.product'); 
-let image = document.querySelectorAll('.product__image');
-let product__quantityValue = document.querySelectorAll('.product__quantity-value');// количество товара
-let decrement = document.querySelectorAll('.product__quantity-control_dec');//уменьшение товара "-"
-let increment = document.querySelectorAll('.product__quantity-control_inc');//прибавление товара "+"
-let product__add = document.querySelectorAll('.product__add');
+const productDec = document.querySelectorAll('.product__quantity-control_dec');
+const productInc = document.querySelectorAll('.product__quantity-control_inc');
+let productQuantity = document.querySelectorAll('.product__quantity-value');
+
+const product = document.querySelectorAll('.product');
+const productImage = document.querySelectorAll('.product__image');
+const productAdd =  document.querySelectorAll('.product__add');
+
+let cartProducts = document.querySelector('.cart__products');
+let cartQuantity = cartProducts.querySelector('.cart__product-count');
+let productInCart = cartProducts.querySelectorAll('.cart__product');
 
 
-
-
-let id = "";
-let cartProducts = document.querySelector('.cart__products'); 
-let src = "";
-
-
-
-for (let i = 0; i < product.length; i++) {	 
-	let quantity = Number(product__quantityValue[i].textContent);
-	//добавление в корзину товара 1шт без нажатия на + или -
-	if(quantity === 1) {
-		product__add[i].addEventListener('click', () => {
-			id = product[i].getAttribute('data-id');
-			src = image[i].getAttribute('src');			
-			let productInCart = cartProducts.querySelector(`[data-id="${id}"]`);
-	
-				if(productInCart) {
-					productInCart.querySelector(".cart__product-count").textContent = quantity;				
-				} else {
-					let html = document.createElement("div");
-					html.setAttribute("class", "cart__product");
-					html.setAttribute("data-id", `${id}`);
-					html.innerHTML = `
-					<img class="cart__product-image" src=${src}>
-					<div class="cart__product-count">${quantity}</div>
-					<!--<div class="cart__product-delete">Удалить</div>-->
-					`;
-					cartProducts.appendChild(html);
-				}
-		})
+function quantitySelection() {
+	for (let i = 0; i < product.length; i++) {				
+		productInc[i].addEventListener('click', () => {			
+			++productQuantity[i].textContent;			
+		})		
+		productDec[i].addEventListener('click', () => {
+			if(productQuantity[i].textContent > 1) {
+				--productQuantity[i].textContent;				
+			}				
+		})					
 	}
-	//добавление в корзину после нажатия на "+" 
-	increment[i].addEventListener('click', () => {	
-		++quantity;
-		product__quantityValue[i].textContent = quantity;
-
-		product__add[i].addEventListener('click', () => {
-			id = product[i].getAttribute('data-id');
-			src = image[i].getAttribute('src');			
-			let productInCart = cartProducts.querySelector(`[data-id="${id}"]`);
-	
-				if(productInCart) {
-					productInCart.querySelector(".cart__product-count").textContent = quantity;				
-				} else {
-					let html = document.createElement("div");
-					html.setAttribute("class", "cart__product");
-					html.setAttribute("data-id", `${id}`);
-					html.innerHTML = `
-					<img class="cart__product-image" src=${src}>
-					<div class="cart__product-count">${quantity}</div>
-					<!--<div class="cart__product-delete">Удалить</div>-->
-					`;
-					cartProducts.appendChild(html);
-				}
-		})	
-	})
-
-	//добавление в корзину после нажатия на "-" 
-	decrement[i].addEventListener('click', () => {
-
-		if(quantity > 1) {
-			--quantity;
-			product__quantityValue[i].textContent = quantity;
-		}
-		
-		product__add[i].addEventListener('click', () => {
-			id = product[i].getAttribute('data-id');
-			src = image[i].getAttribute('src');			
-			let productInCart = cartProducts.querySelector(`[data-id="${id}"]`);
-	
-				if(productInCart) {
-					productInCart.querySelector(".cart__product-count").textContent = quantity;				
-				} else {
-					let html = document.createElement("div");
-					html.setAttribute("class", "cart__product");
-					html.setAttribute("data-id", `${id}`);
-					html.innerHTML = `
-					<img class="cart__product-image" src=${src}>
-					<div class="cart__product-count">${quantity}</div>
-					<!--<div class="cart__product-delete">Удалить</div>-->
-					`;
-					cartProducts.appendChild(html);
-				}
-		})
-	})
 }
+
+function addShoppingCart() {
+	for (let i = 0; i < product.length; i++) {
+		productAdd[i].addEventListener('click', () => {			
+			let id = product[i].getAttribute('data-id');
+			let src = productImage[i].getAttribute('src');
+			let productInCart = cartProducts.querySelector(`[data-id="${id}"]`);
+			if(productInCart) {	
+				let itog = Number(productInCart.querySelector(".cart__product-count").textContent) + Number(productQuantity[i].textContent);					
+				productInCart.querySelector(".cart__product-count").textContent = itog;
+			} else {
+				let html = document.createElement("div");
+				html.setAttribute("class", "cart__product");
+				html.setAttribute("data-id", `${id}`);
+				html.insertAdjacentHTML('beforeend', `
+				<img class="cart__product-image" src=${src}>
+				<div class="cart__product-count">${productQuantity[i].textContent}</div>
+				`);
+				cartProducts.appendChild(html);	
+			}
+			productQuantity[i].textContent = 1;										
+		})		
+	}
+}
+
+quantitySelection();
+addShoppingCart();
+
+
+
