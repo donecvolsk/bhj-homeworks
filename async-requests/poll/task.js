@@ -21,8 +21,7 @@ xhr.addEventListener('readystatechange', () => {
             htmlButtons.textContent = answer[i];
             pollAnswers.appendChild(htmlButtons); 
             
-            htmlButtons.addEventListener('click', (event) => {
-                event.preventDefault;               
+            htmlButtons.addEventListener('click', () => {                          
                 alert("Спасибо, ваш голос засчитан!");
                 location.reload();
             })
