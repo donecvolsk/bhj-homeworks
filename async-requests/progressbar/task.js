@@ -7,7 +7,7 @@ document.getElementsByTagName('input').file.onchange = function() {
     fileName.textContent = file.name;
     send.addEventListener('click', (event) => {
         event.preventDefault();
-        const xhr = new XMLHttpRequest
+        const xhr = new XMLHttpRequest();
         xhr.upload.onprogress = function (event) {
             const progress = document.getElementById( 'progress' );
             progress.value = (event.loaded / event.total).toFixed(3);
